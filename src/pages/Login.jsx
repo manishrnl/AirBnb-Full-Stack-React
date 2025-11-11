@@ -18,7 +18,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://airbnb-full-stack-5qqf.onrender.com/api/v1/auth/login", {
+            const response = await fetch("https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
