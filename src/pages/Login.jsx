@@ -25,7 +25,6 @@ const Login = () => {
                 credentials: "include",
             });
 
-            // Always read response body as text (token or error message)
             const text = await response.text();
 
             if (response.ok) {
@@ -36,10 +35,12 @@ const Login = () => {
                 localStorage.setItem("token", token);
                 localStorage.setItem("user", JSON.stringify({ name: email.split("@")[0], email }));
 
+                // ✅ Trigger Navbar to update immediately
+                window.dispatchEvent(new Event("storage"));
+
                 setAlertMessage(`Welcome, ${email.split("@")[0]}!`);
                 setAlertConfirmAction(() => () => navigate("/"));
             } else {
-                // Handle backend error message (e.g., "Bad credentials")
                 const lowerText = text.toLowerCase();
 
                 if (lowerText.includes("bad credentials") || lowerText.includes("invalid")) {
@@ -58,7 +59,6 @@ const Login = () => {
             setAlertConfirmAction(null);
         }
     };
-
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
