@@ -8,14 +8,29 @@ const Navbar = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
+    // ✅ Load user and listen for localStorage changes
     useEffect(() => {
-        // Load user info from localStorage
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        const loadUser = () => {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            } else {
+                setUser(null);
+            }
+        };
+
+        loadUser(); // initial load
+
+        // Listen for localStorage changes (login/logout in another tab)
+        window.addEventListener("storage", loadUser);
+
+        // ✅ Cleanup
+        return () => {
+            window.removeEventListener("storage", loadUser);
+        };
     }, []);
 
+    // ✅ Logout function outside useEffect
     const handleLogout = () => {
         console.log("User logged out");
         setShowLogout(false);
@@ -139,7 +154,6 @@ const Navbar = () => {
                                                 Sign Up
                                             </Link>
                                         </li>
-
                                     </ul>
                                 </li>
                             )}
