@@ -1,21 +1,20 @@
-import React, {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Alert from "../components/Alert.jsx";
 
-
+// 🔹 Fetch user name from backend by email
 const fetchNameByEmail = async (email) => {
     try {
         const response = await fetch(
             "https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/findNameByEmail",
             {
-                method: "POST", // ✅ use POST now
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email }), // ✅ send email in body
+                body: JSON.stringify({ email }), // backend expects { email }
                 credentials: "include",
             }
         );
 
-        // Try to parse JSON safely
         const text = await response.text();
         let data;
         try {
@@ -24,11 +23,18 @@ const fetchNameByEmail = async (email) => {
             data = text;
         }
 
-        // If backend returns an object with `name`, extract it
-        const name = typeof data === "object" && data.name ? data.name : data;
+        console.log("✅ Raw API Response:", data);
+
+        // 🔹 Your backend returns a UserDto like:
+        // { "name": "John Doe", "email": "...", "role": "USER" }
+        // so safely extract name as a string
+        const name =
+            typeof data === "object"
+                ? data.name || `${data.firstName || ""} ${data.lastName || ""}`.trim()
+                : data;
 
         console.log("✅ Name Fetched =", name);
-        return name;
+        return name || null;
     } catch (error) {
         console.error("❌ Error fetching name:", error);
         return null;
@@ -40,23 +46,27 @@ const Login = () => {
     const [alertMessage, setAlertMessage] = useState("");
     const [alertConfirmAction, setAlertConfirmAction] = useState(null);
 
-    useEffect(() => {
-        document.title = "Login - Hotel Booking";
-    }, []);
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    useEffect(() => {
+        document.title = "Login - Hotel Booking";
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userName, email, password }),
-                credentials: "include",
-            });
+            const response = await fetch(
+                "https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/login",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userName, email, password }),
+                    credentials: "include",
+                }
+            );
 
             const text = await response.text();
 
@@ -64,16 +74,22 @@ const Login = () => {
                 const token = text.trim();
                 localStorage.setItem("token", token);
 
-                // ✅ Fetch the name after successful login
+                // ✅ Fetch name after login
                 const name = await fetchNameByEmail(email);
 
-                // ✅ Store user info locally
-                localStorage.setItem("user", JSON.stringify({ name }));
+                // ✅ Save user info in localStorage (flatten name properly)
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify({
+                        name: name || email.split("@")[0], // fallback if null
+                        email,
+                    })
+                );
 
-                // ✅ Trigger navbar refresh or user greeting
+                // ✅ Notify Navbar to refresh user
                 window.dispatchEvent(new Event("storage"));
 
-                // ✅ Show personalized alert
+                // ✅ Alert message
                 setAlertMessage(`Welcome, ${name || email.split("@")[0]}!`);
                 setAlertConfirmAction(() => () => navigate("/"));
             } else {
@@ -106,7 +122,7 @@ const Login = () => {
                 }}
             />
 
-            <div className="card shadow-lg p-4" style={{width: "400px", borderRadius: "15px"}}>
+            <div className="card shadow-lg p-4" style={{ width: "400px", borderRadius: "15px" }}>
                 <h3 className="text-center mb-4 text-primary">Login</h3>
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">
@@ -141,7 +157,7 @@ const Login = () => {
                         Login
                     </button>
                     <p className="text-center">
-                        Don't have an account?{" "}
+                        Don’t have an account?{" "}
                         <Link to="/signup" className="text-primary">
                             Sign Up
                         </Link>
