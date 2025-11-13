@@ -1,6 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Alert from "../components/Alert.jsx";
+
+
+const fetchNameByEmail = async (email) => {
+    try {
+        const response = await fetch(
+            "https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/findNameByEmail",
+            {
+                method: "POST", // ✅ use POST now
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }), // ✅ send email in body
+                credentials: "include",
+            }
+        );
+
+        // Try to parse JSON safely
+        const text = await response.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            data = text;
+        }
+
+        // If backend returns an object with `name`, extract it
+        const name = typeof data === "object" && data.name ? data.name : data;
+
+        console.log("✅ Name Fetched =", name);
+        return name;
+    } catch (error) {
+        console.error("❌ Error fetching name:", error);
+        return null;
+    }
+};
 
 const Login = () => {
     const navigate = useNavigate();
@@ -10,7 +43,7 @@ const Login = () => {
     useEffect(() => {
         document.title = "Login - Hotel Booking";
     }, []);
-
+    const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -21,28 +54,30 @@ const Login = () => {
             const response = await fetch("https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ userName, email, password }),
                 credentials: "include",
             });
 
             const text = await response.text();
 
             if (response.ok) {
-                // ✅ text is your token string
                 const token = text.trim();
-
-                // Store token and user email (for greeting)
                 localStorage.setItem("token", token);
-                localStorage.setItem("user", JSON.stringify({ name: email.split("@")[0], email }));
 
-                // ✅ Trigger Navbar to update immediately
+                // ✅ Fetch the name after successful login
+                const name = await fetchNameByEmail(email);
+
+                // ✅ Store user info locally
+                localStorage.setItem("user", JSON.stringify({ name }));
+
+                // ✅ Trigger navbar refresh or user greeting
                 window.dispatchEvent(new Event("storage"));
 
-                setAlertMessage(`Welcome, ${email.split("@")[0]}!`);
+                // ✅ Show personalized alert
+                setAlertMessage(`Welcome, ${name || email.split("@")[0]}!`);
                 setAlertConfirmAction(() => () => navigate("/"));
             } else {
                 const lowerText = text.toLowerCase();
-
                 if (lowerText.includes("bad credentials") || lowerText.includes("invalid")) {
                     setAlertMessage("Invalid email or password. Please try again.");
                 } else if (lowerText.includes("not found")) {
@@ -50,7 +85,6 @@ const Login = () => {
                 } else {
                     setAlertMessage(text || "Login failed. Please try again.");
                 }
-
                 setAlertConfirmAction(null);
             }
         } catch (error) {
@@ -72,7 +106,7 @@ const Login = () => {
                 }}
             />
 
-            <div className="card shadow-lg p-4" style={{ width: "400px", borderRadius: "15px" }}>
+            <div className="card shadow-lg p-4" style={{width: "400px", borderRadius: "15px"}}>
                 <h3 className="text-center mb-4 text-primary">Login</h3>
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">

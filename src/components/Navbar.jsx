@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logout from "../pages/Logout.jsx";
@@ -11,10 +10,21 @@ const Navbar = () => {
     // ✅ Load user and listen for localStorage changes
     useEffect(() => {
         const loadUser = () => {
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
-                setUser(JSON.parse(storedUser));
-            } else {
+            try {
+                const storedUser = localStorage.getItem("user");
+                if (storedUser) {
+                    const parsed = JSON.parse(storedUser);
+                    // Defensive check: must have name and must be a string
+                    if (parsed && typeof parsed.name === "string") {
+                        setUser(parsed);
+                    } else {
+                        setUser(null);
+                    }
+                } else {
+                    setUser(null);
+                }
+            } catch (err) {
+                console.error("Error parsing stored user:", err);
                 setUser(null);
             }
         };
@@ -24,13 +34,13 @@ const Navbar = () => {
         // Listen for localStorage changes (login/logout in another tab)
         window.addEventListener("storage", loadUser);
 
-        // ✅ Cleanup
+        // ✅ Cleanup listener
         return () => {
             window.removeEventListener("storage", loadUser);
         };
     }, []);
 
-    // ✅ Logout function outside useEffect
+    // ✅ Logout handler
     const handleLogout = () => {
         console.log("User logged out");
         setShowLogout(false);
@@ -95,13 +105,14 @@ const Navbar = () => {
                                 </Link>
                             </li>
 
-                            {/* 🔹 Show greeting if logged in, otherwise Account dropdown */}
+                            {/* ✅ Safe greeting */}
                             {user ? (
                                 <>
                                     <li className="nav-item">
-                    <span className="nav-link text-success fw-semibold">
-                      👋 Welcome, {user.name}
-                    </span>
+                                        <span className="nav-link text-success fw-semibold">
+                                            👋 Welcome,&nbsp;
+                                            {user.name || "Guest"}
+                                        </span>
                                     </li>
                                     <li className="nav-item dropdown">
                                         <a
@@ -114,16 +125,24 @@ const Navbar = () => {
                                         >
                                             My Account
                                         </a>
-                                        <ul className="dropdown-menu" aria-labelledby="authDropdown">
+                                        <ul
+                                            className="dropdown-menu"
+                                            aria-labelledby="authDropdown"
+                                        >
                                             <li>
-                                                <Link className="dropdown-item" to="/myBookings">
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/myBookings"
+                                                >
                                                     My Bookings
                                                 </Link>
                                             </li>
                                             <li>
                                                 <button
                                                     className="dropdown-item text-danger"
-                                                    onClick={() => setShowLogout(true)}
+                                                    onClick={() =>
+                                                        setShowLogout(true)
+                                                    }
                                                 >
                                                     Logout
                                                 </button>
@@ -143,14 +162,23 @@ const Navbar = () => {
                                     >
                                         Account
                                     </a>
-                                    <ul className="dropdown-menu" aria-labelledby="authDropdown">
+                                    <ul
+                                        className="dropdown-menu"
+                                        aria-labelledby="authDropdown"
+                                    >
                                         <li>
-                                            <Link className="dropdown-item" to="/login">
+                                            <Link
+                                                className="dropdown-item"
+                                                to="/login"
+                                            >
                                                 Login
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link className="dropdown-item" to="/signup">
+                                            <Link
+                                                className="dropdown-item"
+                                                to="/signup"
+                                            >
                                                 Sign Up
                                             </Link>
                                         </li>
