@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Alert from "../components/Alert.jsx";
 
 const Signup = () => {
@@ -21,8 +21,8 @@ const Signup = () => {
         try {
             const response = await fetch("https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/signup", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({name, email, password}),
                 credentials: "include",
             });
 
@@ -68,7 +68,7 @@ const Signup = () => {
                 }}
             />
 
-            <div className="card shadow-lg p-4" style={{ width: "400px", borderRadius: "15px" }}>
+            <div className="card shadow-lg p-4" style={{width: "400px", borderRadius: "15px"}}>
                 <h3 className="text-center mb-4 text-success">Sign Up</h3>
                 <form onSubmit={handleSignup}>
                     <div className="mb-3">

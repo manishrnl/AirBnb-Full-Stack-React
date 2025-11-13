@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Logout from "../pages/Logout.jsx";
 
 const Navbar = () => {
@@ -7,7 +7,6 @@ const Navbar = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
-    // ✅ Load user and listen for localStorage changes
     useEffect(() => {
         const loadUser = () => {
             try {
@@ -30,17 +29,11 @@ const Navbar = () => {
         };
 
         loadUser(); // initial load
-
-        // Listen for localStorage changes (login/logout in another tab)
         window.addEventListener("storage", loadUser);
-
-        // ✅ Cleanup listener
         return () => {
             window.removeEventListener("storage", loadUser);
         };
     }, []);
-
-    // ✅ Logout handler
     const handleLogout = () => {
         console.log("User logged out");
         setShowLogout(false);
@@ -65,7 +58,8 @@ const Navbar = () => {
                             width="28"
                             height="28"
                         >
-                            <path d="M21 11V9a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2a2 2 0 0 0 2 2v7h2v-7h10v7h2v-7a2 2 0 0 0 2-2ZM6 9V7h12v2H6Zm8 9h-4v-4h4v4Z" />
+                            <path
+                                d="M21 11V9a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v2a2 2 0 0 0 2 2v7h2v-7h10v7h2v-7a2 2 0 0 0 2-2ZM6 9V7h12v2H6Zm8 9h-4v-4h4v4Z"/>
                         </svg>
                         <span>Airbnb Clone</span>
                     </Link>
