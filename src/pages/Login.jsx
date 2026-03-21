@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Alert from "../components/Alert.jsx";
-
+import { BASE_URL } from "../service/UserService.jsx";
 const fetchNameByEmail = async (email) => {
     try {
-        const response = await fetch(
-            "https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/findNameByEmail",
+        const response = await fetch(`${BASE_URL}/auth/findNameByEmail`,
             {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -50,8 +49,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(
-                "https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/login",
+            const response = await fetch(`${BASE_URL}/auth/login`,
                 {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},

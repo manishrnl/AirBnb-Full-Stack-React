@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Alert from "../components/Alert.jsx";
-
+import { BASE_URL } from "../service/UserService.jsx";
 const Signup = () => {
     const navigate = useNavigate();
     const [alertMessage, setAlertMessage] = useState("");
@@ -19,7 +19,7 @@ const Signup = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://airbnb-full-stack-spring-boot.onrender.com/api/v1/auth/signup", {
+           const response = await fetch(`${BASE_URL}/auth/signup`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({name, email, password}),
