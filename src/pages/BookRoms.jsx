@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate, useLocation} from "react-router-dom";
 
 const BookRooms = () => {
     const location = useLocation();
@@ -11,10 +11,10 @@ const BookRooms = () => {
 
     useEffect(() => {
         document.title = "Book Rooms - Hotel Booking";
-        
+
         if (!roomDetails) {
             console.warn("No room details found, redirecting...");
-            navigate("/rooms"); 
+            navigate("/rooms");
         }
     }, [roomDetails, navigate]);
 
@@ -27,39 +27,39 @@ const BookRooms = () => {
         roomsCount: 1,
         checkInDate: formatDate(today),
         checkOutDate: formatDate(tomorrow),
-        guests: [{ name: "", gender: "", age: "" }],
+        guests: [{name: "", gender: "", age: ""}],
         bookingStatus: "PENDING",
     });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setBooking((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setBooking((prev) => ({...prev, [name]: value}));
     };
 
     const handleGuestChange = (index, e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         const updatedGuests = [...booking.guests];
         updatedGuests[index][name] = value;
-        setBooking((prev) => ({ ...prev, guests: updatedGuests }));
+        setBooking((prev) => ({...prev, guests: updatedGuests}));
     };
 
     const addGuest = () => {
         setBooking((prev) => ({
             ...prev,
-            guests: [...prev.guests, { name: "", gender: "", age: "" }],
+            guests: [...prev.guests, {name: "", gender: "", age: ""}],
         }));
     };
 
     const removeGuest = (index) => {
         if (booking.guests.length > 1) {
             const updatedGuests = booking.guests.filter((_, i) => i !== index);
-            setBooking((prev) => ({ ...prev, guests: updatedGuests }));
+            setBooking((prev) => ({...prev, guests: updatedGuests}));
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate("/bookings/details", { state: { booking, roomDetails ,hotelName } });
+        navigate("/bookings/details", {state: {booking, roomDetails, hotelName}});
     };
 
     if (!roomDetails) return null;
@@ -67,19 +67,19 @@ const BookRooms = () => {
     return (
         <div className="container my-5">
             <h2 className="text-center mb-4">Book Your Room</h2>
-            
+
             <form onSubmit={handleSubmit} className="shadow p-4 rounded bg-white">
                 {/* Section 1: Room Info (Read Only) */}
                 <div className="row mb-4 bg-light p-3 rounded">
                     <h5 className="mb-3">Selected Room Details</h5>
-                    
+
                     <div className="col-md-4">
                         <label className="form-label text-muted small">Hotel Name</label>
                         <input
                             type="text" // ✅ Fixed: Was "number", changed to "text"
                             className="form-control bg-white"
                             // ✅ Fixed: Accessing the hotel object from your Java Entity
-                            value={hotelName || "N/A"} 
+                            value={hotelName || "N/A"}
                             readOnly
                         />
                     </div>
@@ -201,7 +201,8 @@ const BookRooms = () => {
                 ))}
 
                 <div className="d-flex justify-content-center gap-3 mt-4">
-                    <button type="button" className="btn btn-outline-secondary px-4" onClick={addGuest}>
+                    <button type="button" className="btn btn-outline-secondary px-4"
+                            onClick={addGuest}>
                         + Add Another Guest
                     </button>
                     <button type="submit" className="btn btn-primary px-5">

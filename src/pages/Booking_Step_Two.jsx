@@ -19,7 +19,7 @@ const Booking_Step_Two = () => {
                     <h3 className="text-danger">No booking details found.</h3>
                     <button
                         className="btn btn-outline-primary mt-3"
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/home")}
                     >
                         Back to Home
                     </button>

@@ -29,7 +29,7 @@ const Payments = () => {
                 <h3 className="text-danger">No booking found.</h3>
                 <button
                     className="btn btn-outline-primary mt-3"
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/home")}
                 >
                     Back to Home
                 </button>

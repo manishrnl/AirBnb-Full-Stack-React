@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {React, useEffect, useRef, useState} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
 import SingleCard from "../components/SingleCard.jsx";
-import { getAllHotels } from "../service/UserService.jsx";
+import {getAllHotels} from "../service/UserService.jsx";
+import ShowPremiumToast from "../service/ShowPremiumToast.jsx";
+import PremiumLoader from "../service/PremiumLoader.jsx";
 
 const LoadAllHotels = () => {
     const [hotels, setHotels] = useState([]);
-   
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     // FIXED: Now navigates using the hotelId in the URL path
     const handleLoadHotelDetails = (hotelId, name) => {
         if (hotelId) {
-            navigate(`/hotel/${hotelId}/rooms`, { state: { hotelName: name } });
+            navigate(`/hotel/${hotelId}/rooms`, {state: {hotelName: name}});
         } else {
             console.error("Hotel ID is undefined");
             alert("Could not load rooms: Hotel ID missing.");
@@ -41,19 +44,11 @@ const LoadAllHotels = () => {
             }
         };
         fetchBackendHotels();
-    }, []);
+    }, [location]);
 
-    if (loading)
-        return (
-            <div className="d-flex justify-content-center py-5">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        );
-
-    if (error) return <p className="text-center py-5 text-danger">{error}</p>;
-
+    if (loading) {
+        return <PremiumLoader isDone={loading}/>;
+    }
     return (
         <div className="container py-5" id="hotels">
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -87,7 +82,7 @@ const LoadAllHotels = () => {
                                         hotel.id,
                                         hotel.name,
                                     );
-                                   
+
                                 }}
                             />
                         </div>

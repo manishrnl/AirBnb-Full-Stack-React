@@ -1,7 +1,6 @@
  export const BASE_URL = "https://airbnb-full-stack-spring-boot.onrender.com/api/v1";
 
-import axios from "axios";
-// export const BASE_URL = "http://localhost:8080/api/v1";
+ import axios from "axios";
 
 export const getAllRoomsByHotelId = async (hotelId) => {
     const response = await axios.get(`${BASE_URL}/admin/hotels/${hotelId}/rooms/allRoomsByHotelId`, {

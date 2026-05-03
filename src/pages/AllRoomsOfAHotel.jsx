@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { getAllRoomsByHotelId } from "../service/UserService";
+import React, {useEffect, useState} from "react";
+import {useParams, useNavigate, useLocation} from "react-router-dom";
+import {getAllRoomsByHotelId} from "../service/UserService";
 import SingleCard from "../components/SingleCard";
+import PremiumLoader from "../service/PremiumLoader.jsx";
 
 const AllRoomsOfAHotel = () => {
-    const { hotelId } = useParams();
+    const {hotelId} = useParams();
     const navigate = useNavigate();
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,11 +26,9 @@ const AllRoomsOfAHotel = () => {
         fetchRooms();
     }, [hotelId]);
 
-    if (loading)
-        return (
-            <div className="text-center py-5">Loading available rooms...</div>
-        );
-
+    if (loading) {
+        return <PremiumLoader isDone={loading}/>;
+    }
     return (
         <div className="container py-5">
             <h2 className="fw-bold mb-4">Select a Room in Hotel {hotelName}</h2>
@@ -62,7 +61,7 @@ const AllRoomsOfAHotel = () => {
                         </p>
                         <button
                             className="btn btn-outline-primary"
-                            onClick={() => navigate("/")}
+                            onClick={() => navigate("/home")}
                         >
                             Back to Hotels
                         </button>

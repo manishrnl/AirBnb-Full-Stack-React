@@ -40,7 +40,7 @@ const About = () => {
                         <li>✔ Swimming Pool & Spa</li>
                         <li>✔ Family & Pet Friendly Rooms</li>
                     </ul>
-                    <a href="/" className="btn btn-primary">
+                    <a href="/home" className="btn btn-primary">
                         Explore Rooms
                     </a>
                 </div>

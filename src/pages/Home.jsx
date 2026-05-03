@@ -34,7 +34,7 @@ const Home = () => {
                 className="hero-section text-center d-flex align-items-center justify-content-center position-relative"
                 style={{
                     backgroundImage:
-                        'url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.D_QfonV7GA5Yv8tR2Qu9YAHaFb%3Fpid%3DApi&f=1&ipt=0d21464b9b20d608a5f155251fd8e250ebc11631fb0589dc3660593934b1d4e5&ipo=images")',
+                        'url("https://images.unsplash.com/photo-1502672260266-1c1ef2d93688")',
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     height: "80vh",

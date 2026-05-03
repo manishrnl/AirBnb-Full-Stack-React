@@ -61,8 +61,8 @@ const Login = () => {
             const text = await response.text();
 
             if (response.ok) {
-                const token = text.trim();
-                localStorage.setItem("token", token);
+                const accessToken = text.trim();
+                localStorage.setItem("accessToken", accessToken);
 
                 const name = await fetchNameByEmail(email);
                 localStorage.setItem(
@@ -74,7 +74,7 @@ const Login = () => {
                 );
                 window.dispatchEvent(new Event("storage"));
                 setAlertMessage(`Welcome, ${name || email.split("@")[0]}!`);
-                setAlertConfirmAction(() => () => navigate("/"));
+                setAlertConfirmAction(() => () => navigate("/home"));
             } else {
                 const lowerText = text.toLowerCase();
                 if (lowerText.includes("bad credentials") || lowerText.includes("invalid")) {
