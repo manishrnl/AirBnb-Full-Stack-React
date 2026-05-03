@@ -1,4 +1,4 @@
- export const BASE_URL = "https://airbnb-full-stack-spring-boot.onrender.com";
+ export const BASE_URL = "https://airbnb-full-stack-spring-boot.onrender.com/api/v1";
 
 import axios from "axios";
 // export const BASE_URL = "http://localhost:8080/api/v1";
