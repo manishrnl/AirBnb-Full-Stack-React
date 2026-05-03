@@ -37,12 +37,12 @@ export const getHotelnameByRoomId = async (roomId) => {
     return response.data;
 };
 export const addUser = (user) => {
-    return axios.post("http://localhost:8080/users", user);
+    return axios.post(`${BASE_URL}/users`, user);
 };
 // Update a user
 export const updateUser = (id, user) =>
-    axios.put(`http://localhost:8080/users/${id}`, user);
+    axios.put(`${BASE_URL}/users/${id}`, user);
 
 // Delete a user
 export const deleteUser = (id) =>
-    axios.delete(`http://localhost:8080/users/${id}`);
+    axios.delete(`${BASE_URL}/users/${id}`);
